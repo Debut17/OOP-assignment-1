@@ -12,13 +12,13 @@ class Book:
         self.total_copies = total_copies
         self.available_copies = total_copies
         
-    def decrease_available(self):
+    def borrow(self):
         if self.available_copies > 0:
             self.available_copies -= 1
             return True
         return False
     
-    def increase_available(self):
+    def return_book(self):
         if self.available_copies < self.total_copies:
             self.available_copies += 1
             return True
@@ -36,6 +36,43 @@ class Book:
     def __str__(self):
         return f"Book(ID: {self.id}, Title: '{self.title}', Available: {self.available_copies}/{self.total_copies})"
 
+class Member:
+    def __init__(self, member_id, name, email):
+        self.id = member_id
+        self.name = name
+        self.email = email
+        self.borrowed_books = []
+        
+    def borrow_book(self, book):
+        if len(self.borrowed_books) >= 3:
+            print(f'Error: {self.name} has reached borrowing limit!')
+            return False
+        
+        if not book.borrow():
+            print(f"Error: '{book.title}' is unavailable!")
+
+        self.borrowed_books.append(book)
+        print(f"{self.name} borrowed '{book.title}'")
+        return True
+    
+    def return_book(self, book):
+        if book not in self.borrowed_books:
+            print(f"Error: {self.name} did not borrow '{self.title}'")
+            return False
+        
+        self.borrowed_books.remove(book)
+        book.return_book()
+        print(f"{self.name} returned '{book.title}")
+        return True
+    
+    def list_books(self):
+        if not self.borrowed_books:
+            print(f"{self.name} has no borrowed books.")
+        else:
+            print(f"\nBook borrowed by {self.name}")
+            for b in self.borrowed_books:
+                print(f" - {b.title} by {b.author}")
+        
 def add_book(book_id, title, author, available_copies):
     """Add a new book to the library"""
     book = {
