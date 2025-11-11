@@ -4,6 +4,38 @@ books = []
 members = []
 borrowed_books = []
 
+class Book:
+    def __init__(self, book_id, title, author, total_copies):
+        self.id = book_id
+        self.title = title
+        self.author = author
+        self.total_copies = total_copies
+        self.available_copies = total_copies
+        
+    def decrease_available(self):
+        if self.available_copies > 0:
+            self.available_copies -= 1
+            return True
+        return False
+    
+    def increase_available(self):
+        if self.available_copies < self.total_copies:
+            self.available_copies += 1
+            return True
+        return False
+    
+    def get_info(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'author': self.author,
+            'available_copies': self.available_copies,
+            'total_copies': self.total_copies
+        }
+        
+    def __str__(self):
+        return f"Book(ID: {self.id}, Title: '{self.title}', Available: {self.available_copies}/{self.total_copies})"
+
 def add_book(book_id, title, author, available_copies):
     """Add a new book to the library"""
     book = {
